@@ -15,14 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import javax.servlet.Filter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class MainSecurity extends WebSecurityConfigurerAdapter {
-
+public class MainSecurity extends WebSecurityConfigurerAdapter{
     @Autowired
     UserDetailsImpl userDetailsServicesImpl;
 
@@ -30,12 +28,12 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
     JwtEntryPoint jwtEntryPoint;
 
     @Bean
-    public JwtTokenFilter jwtTokenFilter() {
+    public JwtTokenFilter jwtTokenFilter(){
         return new JwtTokenFilter();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -49,8 +47,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        FilterRegistrationBean<JwtTokenFilter> registrationBean = jwtTokenFilterRegistration();
-        http.addFilterBefore(registrationBean.getFilter(), (Class<? extends Filter>) registrationBean.getClass());
+        http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);           
     }
 
     @Override
@@ -66,10 +63,6 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServicesImpl).passwordEncoder(passwordEncoder());
-    }
-
-    private FilterRegistrationBean<JwtTokenFilter> jwtTokenFilterRegistration() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       auth.userDetailsService(userDetailsServicesImpl).passwordEncoder(passwordEncoder());
     }
 }

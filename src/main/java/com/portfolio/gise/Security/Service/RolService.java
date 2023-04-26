@@ -3,7 +3,7 @@ package com.portfolio.gise.Security.Service;
 import com.portfolio.gise.Security.Entity.Rol;
 import com.portfolio.gise.Security.Enums.RolNombre;
 import com.portfolio.gise.Security.Repository.iRolRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

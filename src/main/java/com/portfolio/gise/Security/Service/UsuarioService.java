@@ -2,8 +2,8 @@ package com.portfolio.gise.Security.Service;
 
 import com.portfolio.gise.Security.Entity.Usuario;
 import com.portfolio.gise.Security.Repository.iUsuarioRepository;
-import jakarta.transaction.Transactional;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

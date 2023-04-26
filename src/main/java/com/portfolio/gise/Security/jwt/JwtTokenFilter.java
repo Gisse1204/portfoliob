@@ -1,25 +1,20 @@
 package com.portfolio.gise.Security.jwt;
 
 import com.portfolio.gise.Security.Service.UserDetailsImpl;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtTokenFilter extends OncePerRequestFilter implements Filter{
+public class JwtTokenFilter extends OncePerRequestFilter{
 
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
@@ -39,7 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter implements Filter{
                         null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
-        } catch (UsernameNotFoundException e) {
+        } catch (Exception e) {
             logger.error("Fallí el metodo doFilterInternal");
         }
         filterChain.doFilter(request, response);
@@ -51,14 +46,5 @@ public class JwtTokenFilter extends OncePerRequestFilter implements Filter{
             return header.replace("Bearer", "");
         return null;
     }
-
-    @Override
-    public void init(FilterConfig filterConfig) throws javax.servlet.ServletException {
-        Filter.super.init(filterConfig); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void doFilter(ServletRequest sr, ServletResponse sr1, javax.servlet.FilterChain fc) throws IOException, javax.servlet.ServletException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
 }
